@@ -12,7 +12,7 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased" style="background-image: url('{{ asset('images/backgrounds/BACKGROUND8.PNG') }}'); background-size: cover; background-position: center; background-attachment: fixed;">
+    <body class="font-sans text-gray-900 antialiased" style="background-image: url('{{ asset('images/backgrounds/BACKGROUND8.png') }}'); background-size: cover; background-position: center; background-attachment: fixed;">
         
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-black/50">
             
