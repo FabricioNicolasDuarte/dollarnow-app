@@ -1,11 +1,10 @@
-# render.yaml (Versión Corregida)
+
 
 services:
-  # Un servicio web para tu aplicación Laravel
   - type: web
     name: dollarnow-app
     env: php
-    runtime: '8.2' # Asegúrate que la versión de PHP coincida con la de tu proyecto
+    phpVersion: '8.2'
     buildCommand: |
       composer install --no-dev --optimize-autoloader
       php artisan key:generate --force
@@ -27,7 +26,6 @@ services:
           property: connectionString
 
 databases:
-  # Una base de datos PostgreSQL gratuita
   - name: dollarnow-db
     databaseName: dollarnow_db
     user: dollarnow_user
