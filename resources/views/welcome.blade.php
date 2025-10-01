@@ -16,7 +16,7 @@
     <div class="relative min-h-screen">
     
         <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover -z-10">
-            <source src="{{ asset('videos/videoinicio.mp4') }}" type="video/mp4">
+            <source src="https://res.cloudinary.com/dx5end206/video/upload/v1759326802/videoiniciodollarnow.mp4" type="video/mp4">
             Tu navegador no soporta el tag de video.
         </video>
         
