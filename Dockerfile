@@ -16,11 +16,11 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-interaction --no-plugins --no-scripts --no-dev --prefer-dist --optimize-autoloader
 
-# Copia el resto del código de la aplicación <<< ¡ESTE ES EL CAMBIO IMPORTANTE!
+# Copia el resto del código de la aplicación
 COPY . .
 
-# Limpia CUALQUIER configuración o caché existente de forma agresiva <<< AHORA SÍ PUEDE ENCONTRAR ARTISAN
-RUN php artisan config:clear && php artisan cache:clear && rm -f bootstrap/cache/config.php
+# Elimina directamente los archivos de caché si existen. Es más seguro que usar Artisan aquí.
+RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes.php
 
 # Copia el script de arranque y hazlo ejecutable
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
