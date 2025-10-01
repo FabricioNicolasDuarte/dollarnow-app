@@ -15,10 +15,12 @@ WORKDIR /app
 # Copia los archivos de dependencias e instala
 COPY composer.json composer.lock ./
 RUN composer install --no-interaction --no-plugins --no-scripts --no-dev --prefer-dist --optimize-autoloader
-RUN php artisan config:clear
 
-# Copia el resto del código de la aplicación
+# Copia el resto del código de la aplicación <<< ¡ESTE ES EL CAMBIO IMPORTANTE!
 COPY . .
+
+# Limpia CUALQUIER configuración o caché existente de forma agresiva <<< AHORA SÍ PUEDE ENCONTRAR ARTISAN
+RUN php artisan config:clear && php artisan cache:clear && rm -f bootstrap/cache/config.php
 
 # Copia el script de arranque y hazlo ejecutable
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
