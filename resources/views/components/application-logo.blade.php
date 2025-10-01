@@ -1,0 +1,1 @@
+<img src="{{ asset('images/logos/logosinfondo.png') }}" alt="Logo de Dollar Now" {{ $attributes }}>
