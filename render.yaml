@@ -1,10 +1,9 @@
-
+# render.yaml (Versión 5 - Corregido env por runtime)
 
 services:
   - type: web
     name: dollarnow-app
-    env: php
-    
+    runtime: php # <-- ¡ESTE ES EL CAMBIO CORRECTO Y FINAL! Se usa 'runtime' en lugar de 'env'.
     buildCommand: |
       composer install --no-dev --optimize-autoloader
       php artisan key:generate --force
