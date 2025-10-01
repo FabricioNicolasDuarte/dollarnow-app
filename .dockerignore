@@ -1,0 +1,13 @@
+# Ignorar el archivo .env si existe localmente
+.env
+
+# ¡La línea clave! Ignorar el archivo de ejemplo para que no se copie
+.env.example
+
+# Ignorar la carpeta de dependencias de PHP y Node
+/vendor/
+node_modules/
+
+# Ignorar archivos de Git
+.git
+.gitignore
