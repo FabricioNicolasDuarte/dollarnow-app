@@ -1,0 +1,34 @@
+# render.yaml
+services:
+  # Un servicio web para tu aplicación Laravel
+  - type: web
+    name: dollarnow-app       # Puedes cambiarle el nombre si quieres
+    env: php
+    runtime: '8.2'           # Asegúrate que la versión de PHP coincida con la de tu proyecto
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      php artisan key:generate --force
+      php artisan storage:link
+      php artisan migrate --force
+    startCommand: php artisan serve --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_URL
+        value: ${RENDER_EXTERNAL_URL}
+      - key: APP_KEY
+        generateValue: true  # Render generará una clave segura
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      # Conecta la base de datos al servicio web
+      - key: DATABASE_URL
+        fromDatabase:
+          name: dollarnow-db
+          property: connectionString
+
+  # Una base de datos PostgreSQL gratuita
+  - type: psql
+    name: dollarnow-db
+    databaseName: dollarnow_db # Nombre de la base de datos
+    user: dollarnow_user       # Nombre de usuario
+    plan: free                 # El plan gratuito de Render
