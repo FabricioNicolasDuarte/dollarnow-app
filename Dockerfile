@@ -1,28 +1,31 @@
 # Usa una imagen oficial de PHP 8.2
 FROM php:8.2-cli-alpine
 
-# Instala dependencias del sistema necesarias para Laravel
-# y las extensiones de PHP para la base de datos (pgsql) y zip.
+# Instala dependencias del sistema y extensiones de PHP
 RUN apk add --no-cache $PHPIZE_DEPS \
     && apk add --no-cache libzip-dev postgresql-dev \
     && docker-php-ext-install pdo pdo_pgsql zip
 
-# Instala Composer (el gestor de paquetes de PHP)
+# Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Establece el directorio de trabajo dentro del contenedor
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos de dependencias primero para aprovechar el cache de Docker
+# Copia los archivos de dependencias e instala
 COPY composer.json composer.lock ./
-# Instala las dependencias de producción de Composer
 RUN composer install --no-interaction --no-plugins --no-scripts --no-dev --prefer-dist --optimize-autoloader
+RUN php artisan config:clear
 
-# Copia el resto del código de tu aplicación al contenedor
+# Copia el resto del código de la aplicación
 COPY . .
 
-# Expone el puerto que usará la aplicación
+# Copia el script de arranque y hazlo ejecutable
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Expone el puerto
 EXPOSE 10000
 
-# Comando por defecto para iniciar el servidor de Laravel
-CMD php artisan serve --host=0.0.0.0 --port=10000
+# El comando para iniciar el contenedor ahora es nuestro script
+CMD ["entrypoint.sh"]
