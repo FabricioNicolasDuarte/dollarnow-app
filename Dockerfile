@@ -1,29 +1,19 @@
 # --- ETAPA 1: Construir los archivos de Frontend (Vite) ---
 FROM node:20-alpine AS frontend
-
-# Establecer directorio de trabajo
 WORKDIR /app
-
-# Copiar archivos de dependencias de Node
 COPY package.json package-lock.json ./
-
-# Instalar dependencias de Node
 RUN npm install
-
-# Copiar el resto de los archivos para poder construir
 COPY . .
-
-# Construir los archivos de producción (CSS, JS)
 RUN npm run build
-
 
 # --- ETAPA 2: Construir la aplicación PHP final ---
 FROM php:8.2-cli-alpine
 
 # Instala dependencias del sistema y extensiones de PHP
+# AÑADIMOS icu-dev (para intl) Y LA EXTENSIÓN intl
 RUN apk add --no-cache $PHPIZE_DEPS \
-    && apk add --no-cache libzip-dev postgresql-dev \
-    && docker-php-ext-install pdo pdo_pgsql zip
+    && apk add --no-cache libzip-dev postgresql-dev icu-dev \
+    && docker-php-ext-install pdo pdo_pgsql zip intl
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

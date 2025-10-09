@@ -2,18 +2,27 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Schema; // Asegúrate de tener este 'use'
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema; // <-- Agrega esta línea
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function register()
+    /**
+     * Register any application services.
+     */
+    public function register(): void
     {
         //
     }
 
-    public function boot()
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
     {
-        Schema::defaultStringLength(191); // <-- Agrega esta línea
+        Schema::defaultStringLength(191);
+
+        // AÑADE ESTA LÍNEA
+        \Carbon\Carbon::setLocale(config('app.locale'));
     }
 }

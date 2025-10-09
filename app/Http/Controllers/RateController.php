@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DollarRate; // Importamos el modelo
+use App\Services\DollarRateService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class RateController extends Controller
 {
-    /**
-     * Muestra la vista principal de cotizaciones.
-     */
     public function index(): View
     {
-        // 1. Obtenemos TODOS los registros de la tabla, ordenados por la fecha más reciente.
-        $rates = DollarRate::latest('rate_date')->get();
+        // Usamos la misma NUEVA llave de caché 'dollar_rates_v2'
+        $rates = Cache::remember('dollar_rates_v2', 3600, function () {
+            $dollarService = new DollarRateService();
+            return $dollarService->fetchAndStoreRates();
+        });
 
-        // 2. Pasamos la variable $rates a la vista.
         return view('rates.index', [
             'rates' => $rates
         ]);
