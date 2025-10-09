@@ -66,7 +66,12 @@ class AnalysisController extends Controller
             // Preparamos los datos para el gráfico
             if ($monthlyAverages->isNotEmpty()) {
                 foreach ($monthlyAverages as $average) {
-                    $chartLabels[] = Carbon::create()->month($average->month)->year($average->year)->locale('es')->translatedFormat('F Y');
+                    // --- ¡ESTA ES LA CORRECCIÓN! ---
+                    // Convertimos los valores a enteros (int) antes de pasarlos a Carbon.
+                    $year = (int)$average->year;
+                    $month = (int)$average->month;
+
+                    $chartLabels[] = Carbon::create()->month($month)->year($year)->locale('es')->translatedFormat('F Y');
                     $chartData[] = $average->average;
                 }
             }
