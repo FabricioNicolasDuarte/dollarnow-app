@@ -3,7 +3,7 @@
 Salir inmediatamente si un comando falla
 set -e
 
-Crear el enlace simbólico para el storage (CRUCIAL para Render)
+Crear el enlace simbolico para el storage (CRUCIAL para Render)
 echo "Running storage:link..."
 php artisan storage:link
 
