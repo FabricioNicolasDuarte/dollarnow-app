@@ -14,7 +14,7 @@
     </head>
     {{-- 1. Copiamos el estilo exacto del body de tu página de login --}}
     <body class="font-sans antialiased" style="background-image: url('{{ asset('images/backgrounds/BACKGROUND8.png') }}'); background-size: cover; background-position: center; background-attachment: fixed;">
-        
+
         {{-- 2. Añadimos la clase bg-black/50 para la capa oscura --}}
         <div class="min-h-screen bg-black/50">
 
@@ -30,6 +30,13 @@
 
             <main>
                 {{ $slot }}
+
+            <footer class="fixed bottom-0 left-0 w-full bg-gray-800 border-t border-gray-700 p-4 text-center z-50">
+                <p class="text-sm text-gray-400">
+                    Proyecto realizado por Fabricio Duarte | Universidad Tecnológica Nacional | Facultad Regional de Resistencia | Programación IV.
+                </p>
+            </footer>
+
             </main>
         </div>
     </body>

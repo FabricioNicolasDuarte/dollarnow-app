@@ -8,14 +8,12 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            <!-- Nueva Sección: Calculadora Interactiva Bidireccional -->
+            <!-- Calculadora Interactiva Bidireccional -->
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 shadow sm:rounded-lg">
                 <div class="max-w-xl mx-auto">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
                         Calculadora de Conversión
                     </h3>
-
-                    <!-- Selector de Modo de Conversión -->
                     <div class="flex items-center justify-center space-x-4 mb-4">
                         <label class="flex items-center space-x-2 cursor-pointer">
                             <input type="radio" name="conversion_mode" value="ars_to_usd" class="form-radio text-lime-500 focus:ring-lime-500" checked>
@@ -26,20 +24,17 @@
                             <span class="text-gray-700 dark:text-gray-300">Dólares a Pesos</span>
                         </label>
                     </div>
-
-                    <!-- Campo de Entrada -->
                     <div>
                         <x-input-label id="input_label" for="amount_input" :value="__('Ingrese monto en Pesos Argentinos (ARS)')" />
                         <input id="amount_input" type="number" placeholder="Ej: 15000" class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-lime-500 dark:focus:border-lime-600 focus:ring-lime-500 dark:focus:ring-lime-600 rounded-md shadow-sm">
                     </div>
-
                     <div id="calculator_results" class="mt-4 space-y-2 text-gray-900 dark:text-gray-100">
-                        <!-- Los resultados se insertarán aquí con JavaScript -->
+                        <!-- Resultados de la calculadora -->
                     </div>
                 </div>
             </div>
 
-            <!-- Sección Existente: Tabla de Cotizaciones -->
+            <!-- Tabla de Cotizaciones -->
             <div class="bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
@@ -77,6 +72,17 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Nueva Sección: Fuente de Datos -->
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 bg-opacity-80 dark:bg-opacity-80 shadow sm:rounded-lg text-center">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    Los datos de las cotizaciones son obtenidos a través de la API pública de
+                    <a href="https://dolarapi.com/" target="_blank" rel="noopener noreferrer" class="font-semibold text-lime-600 dark:text-lime-400 hover:underline">
+                        dolarapi.com
+                    </a>.
+                </p>
+            </div>
+
         </div>
     </div>
 
@@ -87,35 +93,27 @@
         const resultsContainer = document.getElementById('calculator_results');
         const conversionModeRadios = document.querySelectorAll('input[name="conversion_mode"]');
         const inputLabel = document.getElementById('input_label');
-
         let currentMode = 'ars_to_usd';
-
-        // Formateadores de moneda para ARS y USD
         const arsFormatter = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' });
         const usdFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
         function calculate() {
             const amount = parseFloat(amountInput.value);
             resultsContainer.innerHTML = '';
-
-            if (isNaN(amount) || amount <= 0) {
-                return;
-            }
+            if (isNaN(amount) || amount <= 0) return;
 
             if (currentMode === 'ars_to_usd') {
                 ratesData.forEach(rate => {
                     const sellPrice = parseFloat(rate.venta);
                     if (sellPrice > 0) {
-                        const dollarAmount = amount / sellPrice;
-                        appendResult(rate.nombre, usdFormatter.format(dollarAmount));
+                        appendResult(rate.nombre, usdFormatter.format(amount / sellPrice));
                     }
                 });
-            } else { // usd_to_ars
+            } else {
                 ratesData.forEach(rate => {
                     const buyPrice = parseFloat(rate.compra);
                     if (buyPrice > 0) {
-                        const arsAmount = amount * buyPrice;
-                        appendResult(rate.nombre, arsFormatter.format(arsAmount));
+                        appendResult(rate.nombre, arsFormatter.format(amount * buyPrice));
                     }
                 });
             }
@@ -124,10 +122,7 @@
         function appendResult(name, value) {
             const resultElement = document.createElement('div');
             resultElement.className = 'flex justify-between items-center border-b border-gray-200 dark:border-gray-700 py-1';
-            resultElement.innerHTML = `
-                <span class="font-medium">${name}</span>
-                <span class="font-bold text-lime-500 dark:text-lime-400">${value}</span>
-            `;
+            resultElement.innerHTML = `<span class="font-medium">${name}</span><span class="font-bold text-lime-500 dark:text-lime-400">${value}</span>`;
             resultsContainer.appendChild(resultElement);
         }
 
@@ -135,20 +130,12 @@
             currentMode = document.querySelector('input[name="conversion_mode"]:checked').value;
             amountInput.value = '';
             resultsContainer.innerHTML = '';
-
-            if (currentMode === 'ars_to_usd') {
-                inputLabel.textContent = 'Ingrese monto en Pesos Argentinos (ARS)';
-                amountInput.placeholder = 'Ej: 150000';
-            } else {
-                inputLabel.textContent = 'Ingrese monto en Dólares (USD)';
-                amountInput.placeholder = 'Ej: 100';
-            }
+            inputLabel.textContent = currentMode === 'ars_to_usd' ? 'Ingrese monto en Pesos Argentinos (ARS)' : 'Ingrese monto en Dólares (USD)';
+            amountInput.placeholder = currentMode === 'ars_to_usd' ? 'Ej: 150000' : 'Ej: 100';
         }
 
         amountInput.addEventListener('input', calculate);
         conversionModeRadios.forEach(radio => radio.addEventListener('change', updateMode));
-
-        // Inicializar la etiqueta del input al cargar la página
         updateMode();
     </script>
 </x-app-layout>

@@ -70,8 +70,7 @@
                                     @forelse ($monthlyAverages as $average)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ $average->year }}</td>
-                                            {{-- --- ¡ESTA ES LA CORRECCIÓN! --- --}}
-                                            {{-- Convertimos el mes a entero (int) antes de pasarlo a Carbon --}}
+                                            
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ \Carbon\Carbon::create()->month((int)$average->month)->locale('es')->translatedFormat('F') }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500 dark:text-gray-300">$ {{ number_format($average->average, 2, ',', '.') }}</td>
                                         </tr>
