@@ -32,7 +32,7 @@ class ProfileController extends Controller
         if ($request->hasFile('avatar')) {
             // Validar la imagen
             $request->validate([
-                'avatar' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'], // 1MB Max
+                'avatar' => ['image', 'mimes:jpg,jpeg,png', 'max:40024'], // 40MB Max
             ]);
 
             // Borrar el avatar antiguo si existe

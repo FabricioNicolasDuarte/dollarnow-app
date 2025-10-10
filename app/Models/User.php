@@ -65,7 +65,7 @@ class User extends Authenticatable
         return Attribute::make(
             get: fn () => $this->avatar
                 ? Storage::url($this->avatar)
-                : asset('images/avtars/avatarfranklin2.png')
+                : asset('images/avatars/avatarfranklin2.png')
         );
     }
 }
